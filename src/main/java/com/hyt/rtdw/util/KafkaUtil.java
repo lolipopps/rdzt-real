@@ -12,7 +12,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.Arrays;
 import java.util.Properties;
-
 @Slf4j
 public class KafkaUtil {
 

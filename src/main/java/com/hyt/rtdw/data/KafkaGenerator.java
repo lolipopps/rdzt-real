@@ -35,17 +35,17 @@ public class KafkaGenerator {
             }
         });
         thread2.start();
-//
-//        Thread thread3 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    JsonOrderDetailSender.sendMessage(props, 10);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        thread3.start();
+
+        Thread thread3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JsonOrderDetailSender.sendMessage(props, 10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread3.start();
     }
 }

@@ -20,7 +20,6 @@ import java.util.Map;
  * @Version: 1.0
  * @Description: flink 执行的全局参数加载
  */
-@Slf4j
 public class ExecutionEnvUtil {
 
 

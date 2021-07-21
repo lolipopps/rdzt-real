@@ -47,7 +47,7 @@ public class JsonOrderDetailSender {
 
                 );
                 System.out.println( objectMapper.writeValueAsString(map));
-                Thread.sleep(10000);
+                Thread.sleep(100);
             long timecast = System.currentTimeMillis() - timestart;
             System.out.println((i + 1) * currencies.size() + " has sended to topic:[" + topicName + "] in " + timecast + "ms");
             if (timecast < 2000) {

@@ -7,15 +7,12 @@ CREATE TABLE orders
     ts_time    DOUBLE,
     order_time TIMESTAMP(3),
     proc_time as PROCTIME(),
-    amount_kg as amount * 1000,
-    ts as order_time + INTERVAL '1' SECOND,
-    WATERMARK FOR order_time AS order_time
-
+    amount_kg as amount * 1000
 ) with ('connector.type' = 'kafka',
       'connector.version' = 'universal',
       'connector.properties.group.id' = 'g2.group1',
-      'connector.properties.bootstrap.servers' = 'localhost:9092',
-      'connector.properties.zookeeper.connect' = 'localhost:2181',
+      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',
+      'connector.properties.zookeeper.connect' = '172.18.1.21:2181',
       'connector.topic' = 'order_table',
       'connector.startup-mode' = 'latest-offset',
       'format.type' = 'json'
@@ -34,8 +31,8 @@ CREATE TABLE orders
 ) with ('connector.type' = 'kafka',
       'connector.version' = 'universal',
       'connector.properties.group.id' = 'g2.group1',
-      'connector.properties.bootstrap.servers' = 'localhost:9092',
-      'connector.properties.zookeeper.connect' = 'localhost:2181',
+      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',
+      'connector.properties.zookeeper.connect' = '172.18.1.21:2181',
       'connector.topic' = 'order_table',
       'connector.startup-mode' = 'latest-offset',
       'format.type' = 'json'
@@ -46,12 +43,12 @@ CREATE TABLE orders_detail
     order_id   STRING,
     item       STRING,
     state   STRING,
-    order_time TIMESTAMP(3)
+    create_time TIMESTAMP(3)
 ) with ('connector.type' = 'kafka',
       'connector.version' = 'universal',
       'connector.properties.group.id' = 'g2.group1',
-      'connector.properties.bootstrap.servers' = 'localhost:9092',
-      'connector.properties.zookeeper.connect' = 'localhost:2181',
+      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',
+      'connector.properties.zookeeper.connect' = '172.18.1.21:2181',
       'connector.topic' = 'orders_detail',
       'connector.startup-mode' = 'latest-offset',
       'format.type' = 'json',
