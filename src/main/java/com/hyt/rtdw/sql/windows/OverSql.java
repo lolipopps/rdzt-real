@@ -94,7 +94,7 @@ public class OverSql {
                 ")";
         tableEnvironment.sqlUpdate(sinkTableDDL);
         String querySQL =
-                        " SELECT t1.order_id, t1.item, t1.order_time, t2.order_id, t2.create_time,t2.state\n" +
+                        " SELECT t1.order_id, t1.item, t1.order_time, t2.create_time,t2.state\n" +
                         "from (\n" +
                         "         SELECT order_id\n" +
                         "              , item\n" +
