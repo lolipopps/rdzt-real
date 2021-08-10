@@ -52,7 +52,7 @@ public class JsonOrderSender {
 
             );
             System.out.println("order_table:    " + objectMapper.writeValueAsString(map));
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         }
     }
 

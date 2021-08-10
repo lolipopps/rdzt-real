@@ -11,19 +11,6 @@ public class KafkaGenerator {
         Properties props = KafkaConfig.buildKafkaProps();
         props.put("key.serializer", StringSerializer.class.getName());
         props.put("value.serializer", StringSerializer.class.getName());
-
-//        Thread thread1 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    JsonCurrencySender.sendMessage(props, 10);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        thread1.start();
-
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {

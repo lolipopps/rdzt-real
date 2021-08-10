@@ -36,7 +36,7 @@ public class GroupBySql {
                 "  'connector.type' = 'kafka',\n" +
                 "  'connector.topic' = 'order_table',\n" +
                 "  'connector.version'='universal',\n" +
-                "  'connector.properties.zookeeper.connect' = '172.18.1.21:2181',\n" +
+                "  'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
                 "  'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
                 "  'connector.properties.group.id' = 'testGroup3',\n" +
                 "  'connector.startup-mode' = 'latest-offset',\n" +
@@ -55,7 +55,7 @@ public class GroupBySql {
                 "      'connector.version' = 'universal',\n" +
                 "      'connector.properties.group.id' = 'g2.group1',\n" +
                 "      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
-                "      'connector.properties.zookeeper.connect' = '172.18.1.21:2181',\n" +
+                "      'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
                 "      'connector.topic' = 'orders_detail',\n" +
                 "      'connector.startup-mode' = 'latest-offset',\n" +
                 "      'format.type' = 'json',\n" +
@@ -76,7 +76,7 @@ public class GroupBySql {
                 "  'connector.version'='universal',\n" +
                 "  'connector.topic' = 'order_cnt',\n" +
                 "  'update-mode' = 'append',\n" +
-                "  'connector.properties.zookeeper.connect' = '172.18.1.21:2181',\n" +
+                "  'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
                 "  'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
                 "  'format.type' = 'json',\n" +
                 "  'format.derive-schema' = 'true'\n" +
