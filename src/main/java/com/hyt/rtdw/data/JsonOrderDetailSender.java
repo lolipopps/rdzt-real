@@ -34,6 +34,7 @@ public class JsonOrderDetailSender {
                 map.put("order_id", DataGenUtil.getRandomNumber(1,1));
                 map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
                 map.put("state", states.get(random.nextInt(states.size()) % states.size()));
+                map.put("id", DataGenUtil.getString(10));
                 Long time = System.currentTimeMillis();
                 DateFormat dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date date = new Date(time);
@@ -46,11 +47,10 @@ public class JsonOrderDetailSender {
                         ), sendCallBack
 
                 );
-                System.out.println( objectMapper.writeValueAsString(map));
-                Thread.sleep(10000);
+                System.out.println("orders_detail: " + objectMapper.writeValueAsString(map));
+                Thread.sleep(5000);
             long timecast = System.currentTimeMillis() - timestart;
-            System.out.println((i + 1) * currencies.size() + " has sended to topic:[" + topicName + "] in " + timecast + "ms");
-            if (timecast < 2000) {
+                       if (timecast < 2000) {
                 System.out.println("begin sleep...." + System.currentTimeMillis());
                 Thread.sleep(2000);
                 System.out.println("end sleep...." + System.currentTimeMillis());

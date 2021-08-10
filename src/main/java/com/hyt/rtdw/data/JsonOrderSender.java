@@ -51,13 +51,12 @@ public class JsonOrderSender {
                         ), sendCallBack
 
                 );
-                System.out.println( objectMapper.writeValueAsString(map));
+                System.out.println("order_table:    " +  objectMapper.writeValueAsString(map));
                 Thread.sleep(10000);
 
 //            }
             long timecast = System.currentTimeMillis() - timestart;
-            System.out.println((i + 1) * currencies.size() + " has sended to topic:[" + topicName + "] in " + timecast + "ms");
-            if (timecast < 2000) {
+                       if (timecast < 2000) {
                 System.out.println("begin sleep...." + System.currentTimeMillis());
                 Thread.sleep(2000);
                 System.out.println("end sleep...." + System.currentTimeMillis());
@@ -87,11 +86,11 @@ public class JsonOrderSender {
 
     private static List<String> initItemNames() {
         final List<String> itermNames = new ArrayList<>();
-        itermNames.add("Apple");
-        itermNames.add("橘子");
-        itermNames.add("Paper");
-        itermNames.add("牛奶");
-        itermNames.add("酸奶");
+//        itermNames.add("Apple");
+//        itermNames.add("橘子");
+//        itermNames.add("Paper");
+//        itermNames.add("牛奶");
+//        itermNames.add("酸奶");
         itermNames.add("豆腐");
         return itermNames;
     }

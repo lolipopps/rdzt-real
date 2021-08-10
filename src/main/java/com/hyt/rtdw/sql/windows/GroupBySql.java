@@ -1,29 +1,20 @@
 package com.hyt.rtdw.sql.windows;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyt.rtdw.config.KafkaConfig;
-import com.hyt.rtdw.util.KafkaUtil;
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
-import org.apache.flink.table.api.EnvironmentSettings;
-import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableEnvironment;
-
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 
 import java.util.Set;
 
-import static java.lang.System.getProperties;
 
-
-public class OverSql {
+public class GroupBySql {
     public static void main(String[] args) throws Exception {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -57,6 +48,7 @@ public class OverSql {
                 "(\n" +
                 "    order_id   STRING,\n" +
                 "    item       STRING,\n" +
+                "    id       STRING,\n" +
                 "    state   STRING,\n" +
                 "    create_time TIMESTAMP(3)\n" +
                 ") with ('connector.type' = 'kafka',\n" +
@@ -76,7 +68,7 @@ public class OverSql {
                 "  order_id STRING,\n" +
                 "  item STRING,\n" +
                 "  order_time TIMESTAMP(3),\n" +
-                "  order_id2 STRING,\n" +
+                "  id STRING,\n" +
                 "  create_time TIMESTAMP(3),\n" +
                 "  state STRING\n" +
                 ") WITH (\n" +
@@ -91,26 +83,32 @@ public class OverSql {
                 ")";
         tableEnvironment.sqlUpdate(sinkTableDDL);
         String querySQL =
-                        " SELECT t1.order_id, t1.item, t1.order_time, t2.create_time,t2.state\n" +
-                        "from (\n" +
-                        "         SELECT order_id\n" +
-                        "              , item\n" +
-                        "              , order_time\n" +
-                        "              , amount\n" +
-                        "              , ROW_NUMBER() OVER ( PARTITION BY item ORDER BY order_time desc) AS rownum\n" +
-                        "         FROM orders\n" +
-                        "     ) t1\n" +
-                        "         left join\n" +
-                        "     (\n" +
-                        "         SELECT order_id\n" +
-                        "              , item\n" +
-                        "              , create_time\n" +
-                        "              , state\n" +
-                        "              , ROW_NUMBER() OVER ( PARTITION BY item ORDER BY create_time desc) AS rownum\n" +
-                        "         FROM orders_detail\n" +
-                        "     ) t2\n" +
-                        "     on t1.item = t2.item\n" +
-                        "WHERE t1.rownum = 1 and t2.rownum = 1\n ";
+                        " \n" +
+                                "select t1.item\n" +
+                                "     ,t2.state\n" +
+                                "     ,sum(t1.amount) as amount\n" +
+                                "     ,count(1)       as order_cnt\n" +
+                                "     ,count(distinct t1.order_id) as dis_order_cnt\n" +
+                                "     ,count(id)      as     status_cnt\n" +
+                                "from\n" +
+                                "    (\n" +
+                                "        select  order_id\n" +
+                                "             ,item\n" +
+                                "             ,order_time\n" +
+                                "             ,amount\n" +
+                                "        from orders\n" +
+                                "    ) t1\n" +
+                                "        left join\n" +
+                                "    (\n" +
+                                "        select  create_time\n" +
+                                "             ,state\n" +
+                                "             ,order_id\n" +
+                                "             ,id\n" +
+                                "        from orders_detail\n" +
+                                "    ) t2\n" +
+                                "    on t1.order_id = t2.order_id\n" +
+                                "group by  item\n" +
+                                "       ,state\n ";
         Table table = tableEnvironment.sqlQuery(querySQL);
 
         DataStream<Tuple2<Boolean, Row>> tuple2DataStream = tableEnvironment.toRetractStream(table, Row.class);
