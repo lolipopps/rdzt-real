@@ -1,4 +1,5 @@
 package com.hyt.rtdw.data;
+
 import com.hyt.rtdw.util.DataGenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,6 +8,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,37 +33,26 @@ public class JsonOrderSender {
         KafkaProducer<Object, Object> producer = new KafkaProducer<>(kafkaProperties);
         // order stream
         for (int i = 0; i < continueMinutes * 60; i++) {
-            long timestart = System.currentTimeMillis();
-//            for (int j = 0; j < currencies.size(); j++) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("order_id", i);
-                map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
-                map.put("currency", currencies.get(random.nextInt(currencies.size()) % currencies.size()));
-                map.put("amount", random.nextInt(10) % 100 / 100.0);
-                Long time = System.currentTimeMillis();
-                DateFormat dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                Date date = new Date(time);
-                String jsonSchemaDate = dateFormat.format(date);
-                map.put("order_time", jsonSchemaDate);
-                map.put("ts_time", time);
-                producer.send(new ProducerRecord<>(
-                                topicName,
-                                String.valueOf(time),
-                                objectMapper.writeValueAsString(map)
-                        ), sendCallBack
+            Map<String, Object> map = new HashMap<>();
+            map.put("order_id", i);
+            map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
+            map.put("currency", currencies.get(random.nextInt(currencies.size()) % currencies.size()));
+            map.put("amount", random.nextInt(10) % 100 / 100.0);
+            Long time = System.currentTimeMillis();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date date = new Date(time);
+            String jsonSchemaDate = dateFormat.format(date);
+            map.put("order_time", jsonSchemaDate);
+            map.put("ts_time", time);
+            producer.send(new ProducerRecord<>(
+                            topicName,
+                            String.valueOf(time),
+                            objectMapper.writeValueAsString(map)
+                    ), sendCallBack
 
-                );
-                System.out.println("order_table:    " +  objectMapper.writeValueAsString(map));
-                Thread.sleep(10000);
-
-//            }
-            long timecast = System.currentTimeMillis() - timestart;
-                       if (timecast < 2000) {
-                System.out.println("begin sleep...." + System.currentTimeMillis());
-                Thread.sleep(2000);
-                System.out.println("end sleep...." + System.currentTimeMillis());
-
-            }
+            );
+            System.out.println("order_table:    " + objectMapper.writeValueAsString(map));
+            Thread.sleep(10000);
         }
     }
 

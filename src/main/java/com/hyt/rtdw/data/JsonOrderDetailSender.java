@@ -28,34 +28,26 @@ public class JsonOrderDetailSender {
         KafkaProducer<Object, Object> producer = new KafkaProducer<>(kafkaProperties);
         // order stream
         for (int i = 0; i < continueMinutes * 60; i++) {
-            long timestart = System.currentTimeMillis();
+            Map<String, Object> map = new HashMap<>();
+            map.put("order_id", DataGenUtil.getRandomNumber(1, 1));
+            map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
+            map.put("state", states.get(random.nextInt(states.size()) % states.size()));
+            map.put("id", DataGenUtil.getString(10));
+            Long time = System.currentTimeMillis();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date date = new Date(time);
+            String jsonSchemaDate = dateFormat.format(date);
+            map.put("create_time", jsonSchemaDate);
+            producer.send(new ProducerRecord<>(
+                            topicName,
+                            String.valueOf(time),
+                            objectMapper.writeValueAsString(map)
+                    ), sendCallBack
 
-                Map<String, Object> map = new HashMap<>();
-                map.put("order_id", DataGenUtil.getRandomNumber(1,1));
-                map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
-                map.put("state", states.get(random.nextInt(states.size()) % states.size()));
-                map.put("id", DataGenUtil.getString(10));
-                Long time = System.currentTimeMillis();
-                DateFormat dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                Date date = new Date(time);
-                String jsonSchemaDate = dateFormat.format(date);
-                map.put("create_time", jsonSchemaDate);
-                producer.send(new ProducerRecord<>(
-                                topicName,
-                                String.valueOf(time),
-                                objectMapper.writeValueAsString(map)
-                        ), sendCallBack
+            );
+            System.out.println("orders_detail: " + objectMapper.writeValueAsString(map));
+            Thread.sleep(5000);
 
-                );
-                System.out.println("orders_detail: " + objectMapper.writeValueAsString(map));
-                Thread.sleep(5000);
-            long timecast = System.currentTimeMillis() - timestart;
-                       if (timecast < 2000) {
-                System.out.println("begin sleep...." + System.currentTimeMillis());
-                Thread.sleep(2000);
-                System.out.println("end sleep...." + System.currentTimeMillis());
-
-            }
         }
     }
 
