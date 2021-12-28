@@ -43,13 +43,11 @@ public class GroupBySql {
                 "  'format.type' = 'json',\n" +
                 "  'format.derive-schema' = 'true'\n" +
                 ")\n";
-
         String orderDetailTableDDL = "CREATE TABLE orders_detail\n" +
                 "(\n" +
                 "    order_id   STRING,\n" +
-                "    item       STRING,\n" +
                 "    id       STRING,\n" +
-                "    state   STRING,\n" +
+                "    status   STRING,\n" +
                 "    create_time TIMESTAMP(3)\n" +
                 ") with ('connector.type' = 'kafka',\n" +
                 "      'connector.version' = 'universal',\n" +
@@ -63,29 +61,10 @@ public class GroupBySql {
                 "      )\n";
         tableEnvironment.sqlUpdate(orderTableDDL);
         tableEnvironment.sqlUpdate(orderDetailTableDDL);
-
-        String sinkTableDDL = "CREATE TABLE join_order (\n" +
-                "  order_id STRING,\n" +
-                "  item STRING,\n" +
-                "  order_time TIMESTAMP(3),\n" +
-                "  id STRING,\n" +
-                "  create_time TIMESTAMP(3),\n" +
-                "  state STRING\n" +
-                ") WITH (\n" +
-                "  'connector.type' = 'kafka',\n" +
-                "  'connector.version'='universal',\n" +
-                "  'connector.topic' = 'order_cnt',\n" +
-                "  'update-mode' = 'append',\n" +
-                "  'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
-                "  'format.type' = 'json',\n" +
-                "  'format.derive-schema' = 'true'\n" +
-                ")";
-        tableEnvironment.sqlUpdate(sinkTableDDL);
         String querySQL =
                         " \n" +
                                 "select t1.item\n" +
-                                "     ,t2.state\n" +
+                                "     ,t2.status\n" +
                                 "     ,sum(t1.amount) as amount\n" +
                                 "     ,count(1)       as order_cnt\n" +
                                 "     ,count(distinct t1.order_id) as dis_order_cnt\n" +
@@ -101,14 +80,14 @@ public class GroupBySql {
                                 "        left join\n" +
                                 "    (\n" +
                                 "        select  create_time\n" +
-                                "             ,state\n" +
+                                "             ,status\n" +
                                 "             ,order_id\n" +
                                 "             ,id\n" +
                                 "        from orders_detail\n" +
                                 "    ) t2\n" +
                                 "    on t1.order_id = t2.order_id\n" +
                                 "group by  item\n" +
-                                "       ,state\n ";
+                                "       ,status\n ";
         Table table = tableEnvironment.sqlQuery(querySQL);
 
         DataStream<Tuple2<Boolean, Row>> tuple2DataStream = tableEnvironment.toRetractStream(table, Row.class);
@@ -118,15 +97,16 @@ public class GroupBySql {
             @Override
             public void flatMap(Tuple2<Boolean, Row> value, Collector<JSONObject> out) throws Exception {
                 Boolean lastValue = value.f0;
-                if(lastValue) {
+
                     Row row = value.f1;
                     Set<String> names = row.getFieldNames(true);
                     JSONObject json = new JSONObject();
+                    json.put("type",lastValue);
                     for (String name : names) {
                         json.put(name, row.getField(name));
                     }
                     out.collect(json);
-                }
+
             }
         }).print();
 //        FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>(

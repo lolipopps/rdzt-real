@@ -29,9 +29,8 @@ public class JsonOrderDetailSender {
         // order stream
         for (int i = 0; i < continueMinutes * 60; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("order_id", DataGenUtil.getRandomNumber(1, 1));
-            map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
-            map.put("state", states.get(random.nextInt(states.size()) % states.size()));
+            map.put("order_id", DataGenUtil.getRandomNumber(1,3));
+            map.put("status", states.get(random.nextInt(states.size()) % states.size()));
             map.put("id", DataGenUtil.getString(10));
             Long time = System.currentTimeMillis();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -82,11 +81,11 @@ public class JsonOrderDetailSender {
 
     private static List<String> initItemNames() {
         final List<String> itermNames = new ArrayList<>();
-        itermNames.add("Apple");
-        itermNames.add("橘子");
-        itermNames.add("Paper");
-        itermNames.add("牛奶");
-        itermNames.add("酸奶");
+//        itermNames.add("Apple");
+//        itermNames.add("橘子");
+//        itermNames.add("Paper");
+//        itermNames.add("牛奶");
+//        itermNames.add("酸奶");
         itermNames.add("豆腐");
         return itermNames;
     }

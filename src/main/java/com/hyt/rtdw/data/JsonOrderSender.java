@@ -34,7 +34,7 @@ public class JsonOrderSender {
         // order stream
         for (int i = 0; i < continueMinutes * 60; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("order_id", i);
+            map.put("order_id", DataGenUtil.getRandomNumber(1,3));
             map.put("item", itemNames.get(random.nextInt(itemNames.size()) % itemNames.size()));
             map.put("currency", currencies.get(random.nextInt(currencies.size()) % currencies.size()));
             map.put("amount", random.nextInt(10) % 100 / 100.0);
@@ -52,7 +52,7 @@ public class JsonOrderSender {
 
             );
             System.out.println("order_table:    " + objectMapper.writeValueAsString(map));
-            Thread.sleep(1000);
+            Thread.sleep(10000);
         }
     }
 

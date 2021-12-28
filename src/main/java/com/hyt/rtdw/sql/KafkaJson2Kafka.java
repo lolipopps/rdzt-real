@@ -37,7 +37,6 @@ public class KafkaJson2Kafka {
                 "  'format.derive-schema' = 'true'\n" +
                 ")\n";
         tableEnvironment.sqlUpdate(sourceTableDDL);
-
         String sinkTableDDL = "CREATE TABLE order_cnt (\n" +
                 "  log_per_min TIMESTAMP(3),\n" +
                 "  item STRING,\n" +
@@ -54,7 +53,6 @@ public class KafkaJson2Kafka {
                 "  'format.derive-schema' = 'true'\n" +
                 ")";
         tableEnvironment.sqlUpdate(sinkTableDDL);
-
         String querySQL = "insert into order_cnt \n" +
                 "select TUMBLE_END(order_time, INTERVAL '10' SECOND),\n" +
                 " item, COUNT(order_id) as order_cnt, CAST(sum(amount_kg) as BIGINT) as total_quality\n" +

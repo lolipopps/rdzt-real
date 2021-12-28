@@ -47,8 +47,6 @@ public class BaseSqlDemo {
         tableEnvironment.sqlUpdate(sourceTableDDL);
 
       //  tableEnvironment.executeSql("SELECT item AS name, count(distinct order_id) AS number FROM orders GROUP BY item HAVING count(*) > 3").print();
-
-
        Table table =  tableEnvironment.sqlQuery("SELECT DISTINCT item,currency FROM orders");
 //        tableEnvironment.toChangelogStream(table).print();
         tableEnvironment.execute("BaseSql");

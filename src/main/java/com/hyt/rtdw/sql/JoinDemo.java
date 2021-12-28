@@ -6,14 +6,9 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 public class JoinDemo {
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(1);
-        EnvironmentSettings envSettings = EnvironmentSettings.newInstance()
-                .useBlinkPlanner()
-                .inStreamingMode()
-                .build();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();env.setParallelism(1);
+        EnvironmentSettings envSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(env, envSettings);
-
         String orderTableDDL = "CREATE TABLE orders (\n" +
                 "  order_id STRING,\n" +
                 "  item    STRING,\n" +
@@ -33,8 +28,6 @@ public class JoinDemo {
                 "  'format.type' = 'json',\n" +
                 "  'format.derive-schema' = 'true'\n" +
                 ")\n";
-
-
         String currencyTableDDL = "CREATE TABLE orders_detail\n" +
                 "(\n" +
                 "    order_id   STRING,\n" +
@@ -51,8 +44,6 @@ public class JoinDemo {
                 "      'format.type' = 'json',\n" +
                 "      'format.derive-schema' = 'true'\n" +
                 "      )\n";
-        tableEnvironment.sqlUpdate(orderTableDDL);
-        tableEnvironment.sqlUpdate(currencyTableDDL);
 
         String querySQL = "SELECT  t1.order_id \n" +
                 "       ,t1.item \n" +
@@ -63,11 +54,9 @@ public class JoinDemo {
                 "FROM orders t1\n" +
                 "LEFT JOIN orders_detail t2\n" +
                 "ON t1.item = t2.item" ;
-
+        tableEnvironment.sqlUpdate(orderTableDDL);
+        tableEnvironment.sqlUpdate(currencyTableDDL);
         tableEnvironment.executeSql(querySQL).print();
-
-        System.out.println(querySQL);
-
         tableEnvironment.execute("StreamKafka2KafkaJob");
     }
 }

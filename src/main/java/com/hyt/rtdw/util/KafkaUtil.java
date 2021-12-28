@@ -27,7 +27,6 @@ public class KafkaUtil {
             props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
             this.producer = new KafkaProducer<String, String>(props);
             this.topic = topic;
-
         }
         @SneakyThrows
         @Override
