@@ -81,11 +81,11 @@ public class JsonOrderDetailSender {
 
     private static List<String> initItemNames() {
         final List<String> itermNames = new ArrayList<>();
-//        itermNames.add("Apple");
-//        itermNames.add("橘子");
-//        itermNames.add("Paper");
-//        itermNames.add("牛奶");
-//        itermNames.add("酸奶");
+        itermNames.add("Apple");
+        itermNames.add("橘子");
+        itermNames.add("Paper");
+        itermNames.add("牛奶");
+        itermNames.add("酸奶");
         itermNames.add("豆腐");
         return itermNames;
     }

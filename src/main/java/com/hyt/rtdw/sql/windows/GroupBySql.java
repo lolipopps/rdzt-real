@@ -36,8 +36,8 @@ public class GroupBySql {
                 "  'connector.type' = 'kafka',\n" +
                 "  'connector.topic' = 'order_table',\n" +
                 "  'connector.version'='universal',\n" +
-                "  'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'connector.properties.group.id' = 'testGroup3',\n" +
                 "  'connector.startup-mode' = 'latest-offset',\n" +
                 "  'format.type' = 'json',\n" +
@@ -52,8 +52,8 @@ public class GroupBySql {
                 ") with ('connector.type' = 'kafka',\n" +
                 "      'connector.version' = 'universal',\n" +
                 "      'connector.properties.group.id' = 'g2.group1',\n" +
-                "      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
-                "      'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
+                "      'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
+                "      'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
                 "      'connector.topic' = 'orders_detail',\n" +
                 "      'connector.startup-mode' = 'latest-offset',\n" +
                 "      'format.type' = 'json',\n" +
@@ -91,13 +91,10 @@ public class GroupBySql {
         Table table = tableEnvironment.sqlQuery(querySQL);
 
         DataStream<Tuple2<Boolean, Row>> tuple2DataStream = tableEnvironment.toRetractStream(table, Row.class);
-
-
         tuple2DataStream.flatMap(new FlatMapFunction<Tuple2<Boolean, Row>, JSONObject>() {
             @Override
             public void flatMap(Tuple2<Boolean, Row> value, Collector<JSONObject> out) throws Exception {
                 Boolean lastValue = value.f0;
-
                     Row row = value.f1;
                     Set<String> names = row.getFieldNames(true);
                     JSONObject json = new JSONObject();

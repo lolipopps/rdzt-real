@@ -29,8 +29,8 @@ public class KafkaJson2Kafka {
                 "  'connector.type' = 'kafka',\n" +
                 "  'connector.topic' = 'order_table',\n" +
                 "  'connector.version'='universal',\n" +
-                "  'connector.properties.zookeeper.connect' = 'localhost:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = 'localhost:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'connector.properties.group.id' = 'testGroup3',\n" +
                "  'connector.startup-mode' = 'latest-offset',\n" +
                 "  'format.type' = 'json',\n" +
@@ -47,19 +47,19 @@ public class KafkaJson2Kafka {
                 "  'connector.version'='universal',\n" +
                 "  'connector.topic' = 'order_cnt',\n" +
                 "  'update-mode' = 'append',\n" +
-                "  'connector.properties.zookeeper.connect' = 'localhost:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = 'localhost:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'format.type' = 'json',\n" +
                 "  'format.derive-schema' = 'true'\n" +
                 ")";
         tableEnvironment.sqlUpdate(sinkTableDDL);
-        String querySQL = "insert into order_cnt \n" +
+        String querySQL =
                 "select TUMBLE_END(order_time, INTERVAL '10' SECOND),\n" +
                 " item, COUNT(order_id) as order_cnt, CAST(sum(amount_kg) as BIGINT) as total_quality\n" +
                 "from orders\n" +
                 "group by item, TUMBLE(order_time, INTERVAL '10' SECOND)\n" ;
 
-        tableEnvironment.sqlUpdate(querySQL);
+        tableEnvironment.executeSql(querySQL).print();
         System.out.println(sourceTableDDL);
         System.out.println(sinkTableDDL);
         System.out.println(querySQL);

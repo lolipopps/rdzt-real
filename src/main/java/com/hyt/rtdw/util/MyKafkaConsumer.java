@@ -57,7 +57,7 @@ public class MyKafkaConsumer implements Runnable {
 
     public static void main(String args[]) {
 
-        MyKafkaConsumer test1 = new MyKafkaConsumer("order_table");
+        MyKafkaConsumer test1 = new MyKafkaConsumer("order_cnt");
         test1.run();
     }
 }

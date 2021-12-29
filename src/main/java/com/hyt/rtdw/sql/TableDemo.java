@@ -28,8 +28,8 @@ public class TableDemo {
                 "  'connector.type' = 'kafka',\n" +
                 "  'connector.topic' = 'order_table',\n" +
                 "  'connector.version'='universal',\n" +
-                "  'connector.properties.zookeeper.connect' = 'localhost:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = 'localhost:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'connector.properties.group.id' = 'tableDemo',\n" +
                 "  'connector.startup-mode' = 'latest-offset',\n" +
                 "  'format.type' = 'json',\n" +
@@ -46,8 +46,8 @@ public class TableDemo {
                 "  'connector.version'='universal',\n" +
                 "  'connector.topic' = 'order_cnt',\n" +
                 "  'update-mode' = 'append',\n" +
-                "  'connector.properties.zookeeper.connect' = 'localhost:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = 'localhost:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'format.type' = 'json',\n" +
                 "  'format.derive-schema' = 'true'\n" +
                 ")";

@@ -1,22 +1,16 @@
 package com.hyt.rtdw.sql.windows;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyt.rtdw.config.KafkaConfig;
-import com.hyt.rtdw.util.KafkaUtil;
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
-import org.apache.flink.table.api.EnvironmentSettings;
-import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableEnvironment;
-
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
+
 import java.util.Set;
 
 
@@ -42,8 +36,8 @@ public class OverSql {
                 "  'connector.type' = 'kafka',\n" +
                 "  'connector.topic' = 'order_table',\n" +
                 "  'connector.version'='universal',\n" +
-                "  'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
-                "  'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
+                "  'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
+                "  'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
                 "  'connector.properties.group.id' = 'testGroup3',\n" +
                 "  'connector.startup-mode' = 'latest-offset',\n" +
                 "  'format.type' = 'json',\n" +
@@ -59,8 +53,8 @@ public class OverSql {
                 ") with ('connector.type' = 'kafka',\n" +
                 "      'connector.version' = 'universal',\n" +
                 "      'connector.properties.group.id' = 'g2.group1',\n" +
-                "      'connector.properties.bootstrap.servers' = '172.18.1.21:9092',\n" +
-                "      'connector.properties.zookeeper.connect' = '172.18.1.11:2181',\n" +
+                "      'connector.properties.bootstrap.servers' = '47.100.71.215:9092',\n" +
+                "      'connector.properties.zookeeper.connect' = '47.100.71.215:2181',\n" +
                 "      'connector.topic' = 'orders_detail',\n" +
                 "      'connector.startup-mode' = 'latest-offset',\n" +
                 "      'format.type' = 'json',\n" +
@@ -124,7 +118,6 @@ public class OverSql {
             public void flatMap(Tuple2<Boolean, Row> value, Collector<JSONObject> out) throws Exception {
                 Boolean lastValue = value.f0;
                 Row row = value.f1;
-
                 JSONObject json = new JSONObject();
                 json.put("state",lastValue);
                 json.put("ts",row.getField(0));
